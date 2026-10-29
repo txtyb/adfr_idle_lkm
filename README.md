@@ -21,8 +21,40 @@
     ├── service.sh                # 解析符号地址 → insmod → 启动守护
     ├── post-fs-data.sh
     ├── uninstall.sh
-    └── bin/ltpo_idle.sh          # 阶梯策略（触摸/媒体/息屏感知）
+    ├── bin/
+    │   ├── ltpo_idle.sh          # 阶梯策略（触摸/媒体/息屏感知）
+    │   └── ctl.sh                # WebUI 的后端：status/on/off/fps/set/restart/log
+    └── webroot/                  # KernelSU WebUI（index.html + app.js + style.css）
 ```
+
+## WebUI
+
+模块装好后，KernelSU 管理器里该模块会多出 **WebUI** 入口（识别到 `webroot/index.html` 就会显示）。
+
+界面提供：
+
+| 功能 | 说明 |
+|---|---|
+| **总开关** | 开 = 按阶梯降频；关 = 保持满帧（写 `disabled` 标志，守护 1 秒内响应） |
+| **状态卡片** | 当前地板 Hz、下发次数、屏幕状态、电量 |
+| **手动地板** | 120 / 60 / 30 / 10 / 1 一键下发，用于验证 |
+| **阶梯阈值** | 四个阈值（秒）+ 最低档位，保存后自动重启守护 |
+| **日志** | 读取 `ltpo.log` 最后 40 行 |
+
+WebUI 通过 `ksu.exec()` 调用 `bin/ctl.sh`（root 执行），不依赖任何额外服务。
+
+调试时也可以直接命令行用同一套后端：
+
+```bash
+C=/data/adb/modules/adfr_idle/bin/ctl.sh
+su -c "sh $C status"
+su -c "sh $C off|on"
+su -c "sh $C fps 10"
+su -c "sh $C set T1=3000 T4=30000 F4=1"
+su -c "sh $C restart"
+su -c "sh $C log"
+```
+
 
 ## 构建（fork + Actions）
 

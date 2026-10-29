@@ -1,6 +1,6 @@
 id=adfr_idle
 name=ADFR Idle (LTPO)
-version=v1.0
-versionCode=1
+version=v1.2
+versionCode=3
 author=dsh
-description=通过 LKM 直接调用 oplus_adfr_min_fps_update 下发面板 ADFR 命令，让静止画面真正降到 10Hz/1Hz。适用于 LineageOS 等不自带 OPPO 智能刷新率调度的 ROM（OnePlus 15 / sm8850 / android16-6.12）。
+description=通过 LKM 直接调用 oplus_adfr_min_fps_update 下发面板 ADFR 命令，让静止画面真正降到 10Hz/1Hz。带 KernelSU WebUI 开关与阶梯调参。适用于 LineageOS 等不自带 OPPO 智能刷新率调度的 ROM（OnePlus 15 / sm8850 / android16-6.12）。

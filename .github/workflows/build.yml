@@ -54,9 +54,10 @@ jobs:
           rm -rf pkg && mkdir -p pkg/lib pkg/bin
           cp ksu-module/module.prop pkg/
           cp ksu-module/service.sh ksu-module/post-fs-data.sh ksu-module/uninstall.sh pkg/
-          cp ksu-module/bin/ltpo_idle.sh pkg/bin/
+          cp ksu-module/bin/ltpo_idle.sh ksu-module/bin/ctl.sh pkg/bin/
+          cp -r ksu-module/webroot pkg/
           cp "$KO" pkg/lib/adfr_idle.ko
-          chmod 755 pkg/service.sh pkg/post-fs-data.sh pkg/uninstall.sh pkg/bin/ltpo_idle.sh
+          chmod 755 pkg/service.sh pkg/post-fs-data.sh pkg/uninstall.sh pkg/bin/ltpo_idle.sh pkg/bin/ctl.sh
           sed -i "s/^version=.*/version=v1.0-${KMI}/" pkg/module.prop
           cd pkg
           (zip -qr "../adfr_idle-${KMI}-ksu.zip" . || python3 -c "import shutil;shutil.make_archive('../adfr_idle-${KMI}-ksu','zip','.')")

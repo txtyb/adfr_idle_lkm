@@ -23,11 +23,11 @@ DPMS=${LTPO_DPMS:-/sys/class/drm/card0-DSI-1/dpms}
 
 # ---------------- 默认配置（$DATA/config 可覆盖） ----------------
 FPS_ACTIVE=120
-T1=500;   F1=60
-T2=2000;  F2=30
-T3=5000;  F3=10
-T4=10000; F4=1
-REFRESH_MS=900
+T1=3000;  F1=60
+T2=8000;  F2=30
+T3=15000; F3=10
+T4=30000; F4=1
+REFRESH_MS=2000
 MEDIA_GUARD=1
 DRYRUN=0
 LOG_MAX=262144
@@ -104,7 +104,8 @@ cleanup() {
     kill "$LISTENER" 2>/dev/null
     pkill -f "getevent -q" 2>/dev/null
     write_fps "$FPS_ACTIVE"
-    rm -f "$PIDF"
+    # 只删自己的 pid 文件，避免重启时把新实例的 pid 文件删掉
+    [ "$(cat "$PIDF" 2>/dev/null)" = "$$" ] && rm -f "$PIDF"
     log "stopped, restored $FPS_ACTIVE"
     exit 0
 }
@@ -119,6 +120,19 @@ tick=0
 media=0
 
 while :; do
+    # WebUI 的开关：disabled 文件存在时只保持满帧，不做任何降频
+    if [ -f "$DATA/disabled" ]; then
+        if [ "$state" != "disabled" ]; then
+            state=disabled
+            write_fps "$FPS_ACTIVE"
+            cur=$FPS_ACTIVE
+            log "disabled (webui), keep $FPS_ACTIVE"
+        fi
+        now_ms > "$STAMP"
+        sleep 1
+        continue
+    fi
+
     read -r dpms < "$DPMS" 2>/dev/null
     if [ "$dpms" != "On" ]; then
         if [ "$state" != "off" ]; then
@@ -175,5 +189,5 @@ while :; do
         last_write=$now
     fi
 
-    sleep 0.2
+    sleep 0.05
 done

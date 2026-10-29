@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+	<title>ADFR Idle</title>
+	<link rel="stylesheet" href="./style.css">
+</head>
+<body>
+	<header class="topbar">
+		<div class="brand">
+			<h1>ADFR Idle</h1>
+			<span id="pill" class="pill gray">读取中…</span>
+		</div>
+		<button id="refreshBtn" class="ghost" type="button">刷新</button>
+	</header>
+
+	<section class="card">
+		<div class="row">
+			<div>
+				<div class="label">降频守护</div>
+				<div class="sub" id="enabledText">—</div>
+			</div>
+			<label class="switch">
+				<input type="checkbox" id="enableSwitch">
+				<span class="slider"></span>
+			</label>
+		</div>
+	</section>
+
+	<section class="grid">
+		<div class="card stat">
+			<div class="label">当前地板</div>
+			<div class="value"><span id="fpsVal">—</span><small>Hz</small></div>
+		</div>
+		<div class="card stat">
+			<div class="label">下发次数</div>
+			<div class="value" id="appliedVal">—</div>
+		</div>
+		<div class="card stat">
+			<div class="label">屏幕</div>
+			<div class="value sm" id="screenVal">—</div>
+		</div>
+		<div class="card stat">
+			<div class="label">电量</div>
+			<div class="value"><span id="levelVal">—</span><small>%</small></div>
+		</div>
+	</section>
+
+	<section class="card">
+		<div class="label">手动设置地板</div>
+		<div class="chips" id="chips">
+			<button type="button" data-fps="120">120</button>
+			<button type="button" data-fps="60">60</button>
+			<button type="button" data-fps="30">30</button>
+			<button type="button" data-fps="10">10</button>
+			<button type="button" data-fps="1">1</button>
+		</div>
+		<div class="hint">仅用于验证；守护进程运行时会按阶梯覆盖</div>
+	</section>
+
+	<section class="card">
+		<div class="label">阶梯阈值（秒）</div>
+		<div class="fields">
+			<label>降到 60Hz<input id="T1" type="number" min="0.1" step="0.1" inputmode="decimal"></label>
+			<label>降到 30Hz<input id="T2" type="number" min="0.1" step="0.1" inputmode="decimal"></label>
+			<label>降到 10Hz<input id="T3" type="number" min="0.1" step="0.1" inputmode="decimal"></label>
+			<label>降到 1Hz <input id="T4" type="number" min="0.1" step="0.1" inputmode="decimal"></label>
+			<label>最低档位<input id="F4" type="number" min="1" step="1" inputmode="numeric"></label>
+		</div>
+		<button id="saveBtn" class="primary" type="button">保存并重启守护</button>
+	</section>
+
+	<section class="card">
+		<div class="row">
+			<div class="label">日志</div>
+			<button id="logBtn" class="ghost" type="button">读取</button>
+		</div>
+		<pre id="logBox" class="log">点“读取”查看 /data/adb/adfr_idle/ltpo.log</pre>
+	</section>
+
+	<div id="toast" class="toast"></div>
+	<script src="./app.js"></script>
+</body>
+</html>
